@@ -35,11 +35,12 @@
   .form-group.full { grid-column: 1 / -1; }
   .form-group label { font-weight: 600; margin-bottom: 6px; font-size: 14px; }
   .req { color: var(--bad-text); font-weight: 700; margin-left: 4px; }
-  input[type="text"], input[type="number"] {
+  input[type="text"], input[type="number"], select {
     padding: 10px 12px; border: 1px solid var(--border); border-radius: 6px;
     font: inherit; background: #fff;
   }
-  input:focus { outline: none; border-color: var(--brand); box-shadow: 0 0 0 3px rgba(20, 80, 140, 0.1); }
+  select { cursor: pointer; }
+  input:focus, select:focus { outline: none; border-color: var(--brand); box-shadow: 0 0 0 3px rgba(20, 80, 140, 0.1); }
 
   .hint { font-size: 12px; color: var(--muted); margin-top: 4px; }
   .inline-warning { min-height: 20px; margin-top: 6px; font-size: 13px; }
@@ -122,8 +123,56 @@
     <div class="form-grid">
       <div class="form-group">
         <label>접수 지점 <span class="req">필수</span></label>
-        <input type="text" id="branch" placeholder="예: 서울지점" oninput="recalc()">
-        <p class="hint">서울지점, 용산지점, 대전지점, 진주지점, 거제지점, 울산지점</p>
+        <select id="branch" onchange="recalc()" style="width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 6px; font: inherit; background: #fff; cursor: pointer;">
+          <option value="">지점을 선택하세요</option>
+          <optgroup label="서울·경기">
+            <option value="서울지점">서울지점</option>
+            <option value="용산지점">용산지점</option>
+            <option value="강남지점">강남지점</option>
+            <option value="여의도지점">여의도지점</option>
+            <option value="수원지점">수원지점</option>
+            <option value="성남지점">성남지점</option>
+            <option value="고양지점">고양지점</option>
+            <option value="안양지점">안양지점</option>
+            <option value="부천지점">부천지점</option>
+          </optgroup>
+          <optgroup label="인천·강원">
+            <option value="인천지점">인천지점</option>
+            <option value="인천남동지점">인천남동지점</option>
+            <option value="춘천지점">춘천지점</option>
+            <option value="강릉지점">강릉지점</option>
+          </optgroup>
+          <optgroup label="대전·충청">
+            <option value="대전지점">대전지점</option>
+            <option value="천안지점">천안지점</option>
+            <option value="아산지점">아산지점</option>
+            <option value="청주지점">청주지점</option>
+          </optgroup>
+          <optgroup label="전라">
+            <option value="전주지점">전주지점</option>
+            <option value="광주지점">광주지점</option>
+            <option value="목포지점">목포지점</option>
+            <option value="여수지점">여수지점</option>
+          </optgroup>
+          <optgroup label="대구·경북">
+            <option value="대구지점">대구지점</option>
+            <option value="포항지점">포항지점</option>
+            <option value="구미지점">구미지점</option>
+            <option value="경주지점">경주지점</option>
+          </optgroup>
+          <optgroup label="부산·울산·경남">
+            <option value="부산지점">부산지점</option>
+            <option value="창원지점">창원지점</option>
+            <option value="울산지점">울산지점</option>
+            <option value="진주지점">진주지점</option>
+            <option value="거제지점">거제지점</option>
+            <option value="통영지점">통영지점</option>
+          </optgroup>
+          <optgroup label="제주">
+            <option value="제주지점">제주지점</option>
+            <option value="서귀포지점">서귀포지점</option>
+          </optgroup>
+        </select>
       </div>
       <div class="form-group">
         <label>도착 지역 <span class="req">필수</span></label>
@@ -279,9 +328,30 @@
 
 <script>
   const BRANCHES = [
+    // 서울·경기
     { code: '11', name: '서울지점' }, { code: '12', name: '용산지점' },
-    { code: '21', name: '대전지점' }, { code: '31', name: '진주지점' },
-    { code: '32', name: '거제지점' }, { code: '41', name: '울산지점' },
+    { code: '13', name: '강남지점' }, { code: '14', name: '여의도지점' },
+    { code: '21', name: '수원지점' }, { code: '22', name: '성남지점' },
+    { code: '23', name: '고양지점' }, { code: '24', name: '안양지점' },
+    { code: '25', name: '부천지점' },
+    // 인천·강원
+    { code: '31', name: '인천지점' }, { code: '32', name: '인천남동지점' },
+    { code: '41', name: '춘천지점' }, { code: '42', name: '강릉지점' },
+    // 대전·충청
+    { code: '51', name: '대전지점' }, { code: '52', name: '천안지점' },
+    { code: '53', name: '아산지점' }, { code: '54', name: '청주지점' },
+    // 전라
+    { code: '61', name: '전주지점' }, { code: '62', name: '광주지점' },
+    { code: '63', name: '목포지점' }, { code: '64', name: '여수지점' },
+    // 대구·경북
+    { code: '71', name: '대구지점' }, { code: '72', name: '포항지점' },
+    { code: '73', name: '구미지점' }, { code: '74', name: '경주지점' },
+    // 부산·울산·경남
+    { code: '81', name: '부산지점' }, { code: '82', name: '창원지점' },
+    { code: '83', name: '울산지점' }, { code: '84', name: '진주지점' },
+    { code: '85', name: '거제지점' }, { code: '86', name: '통영지점' },
+    // 제주
+    { code: '91', name: '제주지점' }, { code: '92', name: '서귀포지점' },
   ];
 
   const RATE_TABLE = [
